@@ -18,7 +18,7 @@ from conversion_pdf import pdf_docx,pdf_mp3,pdf_csv,pdf_jpg,pdf_txt,pdf_png,pdf_
 from conversion_docx import docx_mp3, docx_pdf,docx_txt,docx_doc,docx_jpg,docx_png,docx_rtf
 from conversion_jpg import jpg_pdf,jpg_gif,jpg_png
 from conversion_png import png_jpg,png_gif,png_pdf
-
+from telegram.ext import Updater
 
 import PyPDF2
 
@@ -853,7 +853,13 @@ async def random_value(call:types.CallbackQuery):
     
     
 def main():
-    executor.start_polling(dp)
+    # Updater.start_webhook(listen=)
+    
+    Updater.start_webhook(listen='127.0.0.1',
+                        port=443,
+                        url_path="https://formatconverter.netlify.app/")
+
+    Updater.bot.setWebhook("https://formatconverter.netlify.app/" + "5504002265:AAHRJ5aNWsmY-FInF6mBOcgouCu7_mrvPYk")
 
 
 if __name__=='__main__':
