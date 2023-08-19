@@ -1,6 +1,5 @@
 import tabula 
 import os
-import imp
 
 def pdf_csv_convert(a):
     b = os.path.splitext(a)
