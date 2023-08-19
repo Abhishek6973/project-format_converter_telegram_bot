@@ -195,12 +195,6 @@ async def random_answer(message:types.Message):
         
         await message.reply("Available conversion that we support for png..",reply_markup=keyboard_inline_png)
         
-    # if extension=='ppt' or 'pptx':
-    #     await message.reply("Available conversion that we support for ppt...",reply_markup=keyboard_inline_ppt)
-        
-    # else:
-    #     await message.reply("please keep patience...")
-        
     
 #################################### IMAGE HANDLER ###########################################
 
