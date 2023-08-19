@@ -83,22 +83,7 @@ button20=InlineKeyboardButton(text="jpg",callback_data="png_jpg")
 keyboard_inline_png = InlineKeyboardMarkup().add(button18,button19).add(button20)
 
 
-##################################### PPT HANDLER ################################################
-# button21=InlineKeyboardButton(text="pdf",callback_data="ppt_pdf")
-
-# keyboard_inline_ppt= InlineKeyboardMarkup().add(button21)
-
-
-# button22= InlineKeyboardButton(text="yes",callback_data='yes')
-# button23 = InlineKeyboardButton(text="no",callback_data="no")
-
-
-# keyboard_inline_jpg_in=InlineKeyboardMarkup().add(button22,button23)
-
-
 global message1
-
-# global pic_counter
 
 global message2
 
@@ -106,7 +91,6 @@ message2=0
 
 message1=0
 
-# pic_counter=0
 
 ##################################### Start Message HANDLER ###########################################
 
