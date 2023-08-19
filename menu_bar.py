@@ -236,87 +236,119 @@ main_pic_name=""
 @dp.callback_query_handler(text=["jpg_gif","jpg_png","jpg_pdf"])
 async def random_value(call:types.CallbackQuery):
     global pic_counter
-    # global main_pic_name = ""
+
     
-    ##################################### IMAGE JPG_GIF HANDLER ###########################################
+######################################### IMAGE JPG_GIF HANDLER ###########################################
+    
+    try:           
+        if call.data=='jpg_gif':
+            await call.message.reply("available for conversion")
             
-    if call.data=='jpg_gif':
-        await call.message.reply("available for conversion")
-        
 
-        file = await message2.photo[-1].get_file()
+            file = await message2.photo[-1].get_file()
 
-        file_name_len=12
-        res = ''.join(random.choices(string.ascii_uppercase +
-                                    string.digits, k=file_name_len))
-        file_name=str(res)+'.jpg'
+            file_name_len=12
+            res = ''.join(random.choices(string.ascii_uppercase +
+                                        string.digits, k=file_name_len))
+            file_name=str(res)+'.jpg'
 
-        await file.download(file_name)
-        
-        bot.reply_to(message2,"gif conversion in process")
-        
-        jpg_gif.jpg_gif_convert(file_name)
-        
-        
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.gif', 'rb'))
-        
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.gif')
-        
+            await file.download(file_name)
+            
+            bot.reply_to(message2,"Gif conversion in process⌛...")
+            
+            try:
+                jpg_gif.jpg_gif_convert(file_name)
+            
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.gif', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+    Conversion: JPG ➡ GIF
+    Status: Failed
+    ❌ Conversion failed
+    Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.gif')
+            
     
-    ##################################### IMAGE JPG_PNG HANDLER ###########################################
+########################################## IMAGE JPG_PNG HANDLER ###########################################
 
 
-    elif call.data=='jpg_png':
-        # await call.message.reply("available for conversion")        
+        elif call.data=='jpg_png':
+            # await call.message.reply("available for conversion")        
 
-        file = await message2.photo[-1].get_file()
+            file = await message2.photo[-1].get_file()
 
-        file_name_len=12
-        res = ''.join(random.choices(string.ascii_uppercase +
-                                    string.digits, k=file_name_len))
-        file_name=str(res)+'.jpg'
+            file_name_len=12
+            res = ''.join(random.choices(string.ascii_uppercase +
+                                        string.digits, k=file_name_len))
+            file_name=str(res)+'.jpg'
 
-        await file.download(file_name)
-        
-        bot.reply_to(message2,"png conversion in process")
-        
-        jpg_png.jpg_png_convert(file_name)
-        
-        
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.png', 'rb'))
-        
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.png')
+            await file.download(file_name)
+            
+            bot.reply_to(message2,"png conversion in process⌛")
+            
+            try:
+                jpg_png.jpg_png_convert(file_name)
+            
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.png', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+    Conversion: JPG ➡ PNG
+    Status: Failed
+    ❌ Conversion failed
+    Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.png')
     
-    ##################################### IMAGE JPG_PDF HANDLER ###########################################
     
-    elif call.data == 'jpg_pdf':
+######################################### IMAGE JPG_PDF HANDLER ###########################################
     
-        file = await message2.photo[-1].get_file()
+        
+        elif call.data == 'jpg_pdf':
+        
+            file = await message2.photo[-1].get_file()
 
-        file_name_len=12
-        res = ''.join(random.choices(string.ascii_uppercase +
-                                    string.digits, k=file_name_len))
-        file_name=str(res)+'.jpg'
+            file_name_len=12
+            res = ''.join(random.choices(string.ascii_uppercase +
+                                        string.digits, k=file_name_len))
+            file_name=str(res)+'.jpg'
 
-        await file.download(file_name)
+            await file.download(file_name)
+            
+            bot.reply_to(message2,"pdf conversion in process⌛..")
+            
+            jpg_pdf.jpg_pdf_convert(file_name)
+            
+            try:
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+    Conversion: JPG ➡ PDF
+    Status: Failed
+    ❌ Conversion failed
+    Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.pdf')
+            
+    except Exception as e:
+        error_message = "An error occurred: "
+        bot.reply_to(message1, error_message)
         
-        bot.reply_to(message2,"pdf conversion in process")
-        
-        jpg_pdf.jpg_pdf_convert(file_name)
-        
-        
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message2.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
-        
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.pdf')
         
 ##################################### IMAGE PNG HANDLER ###########################################
 
@@ -325,87 +357,117 @@ async def random_value(call:types.CallbackQuery):
 async def random_value(call:types.CallbackQuery):
     
     
-    ##################################### IMAGE PNG_GIF HANDLER ###########################################
+ ######################################### IMAGE PNG_GIF HANDLER ###########################################
     
-    if call.data=='png_gif':
-        await call.message.reply("available for conversion")
-  
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pngtogif = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pngtogif.file_path)
-        
-        
-        bot.reply_to(message1,"gif conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        png_gif.png_gif_convert(file_name)
-        
-         
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.gif', 'rb'))
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.gif')
-        
-
-        
-    ##################################### IMAGE PNG_JPG HANDLER ###########################################
-
-
-    elif call.data=='png_jpg':
-        await call.message.reply("available for conversion")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pngtojpg = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pngtojpg.file_path)
-        
-        bot.reply_to(message1,"jpg conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        png_jpg.png_jpg_convert(file_name)
-        
-         
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.jpg', 'rb'))
+    try:
+        if call.data=='png_gif':
+            await call.message.reply("available for conversion")
     
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.jpg')
-        
-        
-    ##################################### IMAGE PNG_PDF HANDLER ###########################################
-    
-    elif call.data=='png_pdf':
-        await call.message.reply("available for conversion")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pngtopdf = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pngtopdf.file_path)
-        
-        bot.reply_to(message1,"pdf conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        png_pdf.png_pdf_convert(file_name)
-        
-         
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.pdf')
-        
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pngtogif = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pngtogif.file_path)
+            
+            
+            bot.reply_to(message1,"gif conversion in process⌛...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+            
+            try:
+                png_gif.png_gif_convert(file_name)    
+                
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.gif', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+Conversion: PNG ➡ GIF
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:  
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.gif')
 
+        
+######################################### IMAGE PNG_JPG HANDLER ###########################################
+
+
+        elif call.data=='png_jpg':
+            await call.message.reply("available for conversion")
+            
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pngtojpg = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pngtojpg.file_path)
+            
+            bot.reply_to(message1,"jpg conversion in process⌛...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+            
+            try:
+                png_jpg.png_jpg_convert(file_name)
+            
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.jpg', 'rb'))
+            
+            except:    
+                error_message = """ℹ️ Task Details
+Conversion: PNG ➡ JPG
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:   
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.jpg')
+            
+        
+ ######################################### IMAGE PNG_PDF HANDLER ###########################################
+    
+    
+        elif call.data=='png_pdf':
+            await call.message.reply("available for conversion")
+            
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pngtopdf = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pngtopdf.file_path)
+            
+            bot.reply_to(message1,"pdf conversion in process⌛...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+            
+            try:
+                png_pdf.png_pdf_convert(file_name)
+                
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
+            except:
+                error_message = """ℹ️ Task Details
+Conversion: PNG ➡ PDF
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.pdf')
+            
+    except Exception as e:
+        error_message = "An error occurred: "
+        bot.reply_to(message1, error_message)
+        
         
 ##################################### DOCUMENT PDF HANDLER ###########################################
     
@@ -413,219 +475,293 @@ async def random_value(call:types.CallbackQuery):
 @dp.callback_query_handler(text=["docx","mp3","csv","txt","png","jpg","rtf"])
 async def random_value(call:types.CallbackQuery):
     
-    ################################# DOCUMENT PDF TO DOCX HANDLER ###########################################
-
-    if call.data=="docx":
-        global message1
-        await call.message.reply("available for conversion")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"docx conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+ ##################################### DOCUMENT PDF TO DOCX HANDLER ###########################################
+    
+    try:
+        if call.data=="docx":
+            global message1
+            await call.message.reply("available for conversion")
             
-        docx_file=pdf_docx.pdf_docx_convert(file_name)
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"docx conversion in process...⌛")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                    
+                docx_file=pdf_docx.pdf_docx_convert(file_name)
+                
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.docx', 'rb'))
+                
+            except:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ DOCX
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+            # path_name=os.path(filename)
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.docx')
         
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.docx', 'rb'))
         
-        # path_name=os.path(filename)
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.docx')
-        
-        
-        
-        
-    ################################## DOCUMENT PDF TO MP3 HANDLER ###########################################
+##################################### DOCUMENT PDF TO MP3 HANDLER ###########################################
 
             
-    elif call.data=="mp3":
-        await call.message.reply("available for conversion")  
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"mp3 conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+        elif call.data=="mp3":
+            await call.message.reply("available for conversion")  
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
             
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
-        get_name_without_extension = file_name.split('.')[0]
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"mp3 conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+            
+            try:
+                bot.send_message(message1.chat.id, "File converting is started,please wait⌛\n")
+                get_name_without_extension = file_name.split('.')[0]
 
-        result = pdf_mp3.pdf_to_mp3(file_path=f'{get_name_without_extension}.pdf', language="en")
+                result = pdf_mp3.pdf_to_mp3(file_path=f'{get_name_without_extension}.pdf', language="en")
+                
+                bot.send_message(message1.chat.id, result)
+                bot.send_audio(chat_id=message1.chat.id, audio=open(f'{get_name_without_extension}.mp3', 'rb'))
+                
+            except:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ MP3
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.mp3')
         
-        bot.send_message(message1.chat.id, result)
-        bot.send_audio(chat_id=message1.chat.id, audio=open(f'{get_name_without_extension}.mp3', 'rb'))
         
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.mp3')
-        
-        
-    ##################################### DOCUMENT PDF TO CSV HANDLER ###########################################
+##################################### DOCUMENT PDF TO CSV HANDLER ###########################################
         
     
-    elif call.data=="csv":
-        await call.message.reply("available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"csv conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+        elif call.data=="csv":
+            await call.message.reply("available for conversion..")
             
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
-        get_name_without_extension = file_name.split('.')[0]
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"csv conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+                
+            bot.send_message(message1.chat.id, "File converting is started,please wait ⌛\n")
+            get_name_without_extension = file_name.split('.')[0]
+                
+            try:
+                csv_file=pdf_csv.pdf_csv_convert(file_name)
+                
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.csv', 'rb'))
+            
+            except Exception as conversion_error:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ CSV
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.csv')
         
-        csv_file=pdf_csv.pdf_csv_convert(file_name)
-        
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.csv', 'rb'))
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.csv')
-        
-    ##################################### DOCUMENT PDF TO TXT HANDLER ###########################################
+##################################### DOCUMENT PDF TO TXT HANDLER ###########################################
         
 
-    elif call.data=="txt":
-        await call.message.reply("available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"txt conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+        elif call.data=="txt":
+            await call.message.reply("available for conversion..")
             
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"txt conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+                
+            bot.send_message(message1.chat.id, "File converting is started, Please Wait⌛\n")
+            
+            try:
+                pdf_txt.pdf_txt_convert(file_name)
+                get_name_without_extension = file_name.split('.')[0]
+                bot.send_document(chat_id=message1.chat.id, document=open(f'{get_name_without_extension}.txt', 'rb'))
+                
+            except Exception as conversion_error:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ TXT
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))  # Remove the downloaded PDF file
+                os.remove(f'{get_name_without_extension}.txt') 
         
-        pdf_txt.pdf_txt_convert(file_name)
-        
-        get_name_without_extension = file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.txt', 'rb'))
-
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.txt')
         
 ##################################### DOCUMENT PDF TO PNG HANDLER ###########################################
 
-        
-    elif call.data=="png":
-        await call.message.reply(" available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"png conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
-        get_name_without_extension = file_name.split('.')[0]
-        
-        png_file=pdf_png.pdf_png_convert(file_name)
-        
-        file = open(file_name, 'rb')
-        readpdf = PyPDF2.PdfFileReader(file)
-        totalpages = readpdf.numPages
-        
-        for i in range(totalpages):
-            bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.png', 'rb'))
-        
-        os.remove(str(file_name))
-        
-        for i in range(totalpages):
-            os.remove(str(get_name_without_extension)+str(i)+'.png')
- 
+            
+        elif call.data=="png":
+            await call.message.reply(" available for conversion..")
+            
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"png conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+            
+            bot.send_message(message1.chat.id, "File converting is started,please wait⌛\n")
+            get_name_without_extension = file_name.split('.')[0]
+            
+            try:
+                png_file=pdf_png.pdf_png_convert(file_name)
+                
+                file = open(file_name, 'rb')
+                readpdf = PyPDF2.PdfFileReader(file)
+                totalpages = readpdf.numPages
+                
+                for i in range(totalpages):
+                    bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.png', 'rb'))
+            
+            except Exception as conversion_error:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ PNG
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                
+                for i in range(totalpages):
+                    os.remove(str(get_name_without_extension)+str(i)+'.png')
+    
+    
 ##################################### DOCUMENT PDF TO JPG HANDLER ###########################################
 
- 
-    elif call.data=="jpg":
-        await call.message.reply(" available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"jpg conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+    
+        elif call.data=="jpg":
+            await call.message.reply(" available for conversion..")
             
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
-        
-        get_name_without_extension = file_name.split('.')[0]
-        png_file=pdf_jpg.pdf_jpg_convert(file_name)
-        
-        file = open(file_name, 'rb')
-        readpdf = PyPDF2.PdfFileReader(file)
-        totalpages = readpdf.numPages
-        
-        for i in range(totalpages):
-            bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.jpg', 'rb'))
-
-
-        os.remove(str(file_name))
-        
-        for i in range(totalpages):
-            os.remove(str(get_name_without_extension)+str(i)+'.jpg')
-    
-    
-    ##################################### DOCUMENT PDF TO RTF HANDLER ###########################################
-
-
-    elif call.data=="rtf":
-        await call.message.reply(" available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"rtf conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
             
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"jpg conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+                
+            bot.send_message(message1.chat.id, "File converting is started,please wait⌛\n")
+            
+            get_name_without_extension = file_name.split('.')[0]
+            
+            try:
+                png_file=pdf_jpg.pdf_jpg_convert(file_name)
+                
+                file = open(file_name, 'rb')
+                readpdf = PyPDF2.PdfFileReader(file)
+                totalpages = readpdf.numPages
+                
+                for i in range(totalpages):
+                    bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.jpg', 'rb'))
+            
+            except Exception as conversion_error:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ JPG
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                
+                for i in range(totalpages):
+                    os.remove(str(get_name_without_extension)+str(i)+'.jpg')
         
-        get_name_without_extension = file_name.split('.')[0]
-        png_file=pdf_rtf.pdf_rtf_convert(file_name)
-        
-        get_name_without_extension = file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.rtf', 'rb'))
-
-
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.rtf')
- 
-    await call.answer()
     
+##################################### DOCUMENT PDF TO RTF HANDLER ###########################################
+
+
+        elif call.data=="rtf":
+            await call.message.reply(" available for conversion..")
+            
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"rtf conversion in process...")
+            
+            with open(f'{file_name}', 'wb') as file:
+                file.write(downloaded_file)
+                
+            bot.send_message(message1.chat.id, "File converting is started,please wait⌛\n")
+            
+            get_name_without_extension = file_name.split('.')[0]
+            
+            try:
+                png_file=pdf_rtf.pdf_rtf_convert(file_name)
+                
+                get_name_without_extension = file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.rtf', 'rb'))
+
+            except Exception as conversion_error:
+                error_message = """ℹ️ Task Details
+Conversion: PDF ➡ RTF
+Status: Failed
+❌ Conversion failed
+Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.rtf')
+    
+        await call.answer()
+        
+    except Exception as e:
+        error_message = "An error occurred: "
+        bot.reply_to(message1, error_message)
+        
     
     
 ###################################### DOCUMENT DOCX HANDLER ###########################################
@@ -635,219 +771,289 @@ async def random_value(call:types.CallbackQuery):
 async def random_value(call:types.CallbackQuery):
     
     
-    ##################################### DOCUMENT DOCX TO PDF HANDLER ###########################################
+##################################### DOCUMENT DOCX TO PDF HANDLER ###########################################
 
-    if call.data=="docx_pdf":
-        
-        await call.message.reply("pdf available for conversion")
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"pdf conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-            
-        bot.send_message(message1.chat.id, "pdf converting is started,please wait\n")
-        
-        get_name_without_extension = file_name.split('.')[0]
-        pdf_file=docx_pdf.docx_pdf_convert(file_name)
-        
-        
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
 
-       
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.pdf')
+    try:
+        if call.data=="docx_pdf":
+            
+            await call.message.reply("pdf available for conversion")
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"pdf conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                    
+                bot.send_message(message1.chat.id, "pdf converting is started,please wait⌛\n")
+                
+                get_name_without_extension = file_name.split('.')[0]
+                pdf_file=docx_pdf.docx_pdf_convert(file_name)    
+                
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.pdf', 'rb'))
+            
+            except: 
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ PDF
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.pdf')
+            
         
-        
-    ##################################### DOCUMENT PDF TO MP3 HANDLER ###########################################
+##################################### DOCUMENT DOCX TO MP3 HANDLER ###########################################
 
-    elif call.data=="docx_mp3":
-        
-        await call.message.reply("mp3 available for conversion.")
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"mp3 conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        get_name_without_extension = file_name.split('.')[0]
 
-        docx_mp3.docx_mp3_convert(file_path=f'{get_name_without_extension}.docx', language="en")
-        
-        bot.send_audio(chat_id=message1.chat.id, audio=open(f'{get_name_without_extension}.mp3', 'rb'))
-        
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.mp3')
-        
-        
-    ##################################### DOCUMENT DOCX TO CSV HANDLER ###########################################
+        elif call.data=="docx_mp3":
             
+            await call.message.reply("mp3 available for conversion.")
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
             
-    elif call.data=="docx_doc":
-        
-        await call.message.reply("doc available for conversion.")
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"doc conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
             
-        get_name_without_extension = file_name.split('.')[0]
-        doc_file=docx_doc.docx_doc_convert(file_name)
-        
-        
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.doc', 'rb'))
-        
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.doc')
-        
+            bot.reply_to(message1,"mp3 conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                
+                get_name_without_extension = file_name.split('.')[0]
 
-       
-    ##################################### DOCUMENT DOCX TO TXT HANDLER ###########################################
+                docx_mp3.docx_mp3_convert(file_path=f'{get_name_without_extension}.docx', language="en")
+                
+                bot.send_audio(chat_id=message1.chat.id, audio=open(f'{get_name_without_extension}.mp3', 'rb'))
+            
+            except: 
+                error_message = """ℹ️ Task Details
+            Conversion: DOCX ➡ MP3
+            Status: Failed
+            ❌ Conversion failed
+            Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+                
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.mp3')
+        
+        
+##################################### DOCUMENT DOCX TO CSV HANDLER ###########################################
             
             
-    elif call.data=="docx_txt":
-        
-        await call.message.reply("txt available for conversion.")
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"txt conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
+        elif call.data=="docx_doc":
             
-        get_name_without_extension = file_name.split('.')[0]
-        txt_file=docx_txt.docx_txt_convert(file_name)
-        
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.txt', 'rb'))
+            await call.message.reply("doc available for conversion.")
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"doc conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                    
+                get_name_without_extension = file_name.split('.')[0]
+                doc_file=docx_doc.docx_doc_convert(file_name)
+                
+                
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.doc', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ CSV
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:   
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.doc')
+            
 
-        os.remove(str(file_name))
-        os.remove(str(get_name_without_extension)+'.txt')
-        
+##################################### DOCUMENT DOCX TO TXT HANDLER ###########################################
+            
+            
+        elif call.data=="docx_txt":
+            
+            await call.message.reply("txt available for conversion⌛...")
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            try:
+                bot.reply_to(message1,"txt conversion in process...")
+                
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                    
+                get_name_without_extension = file_name.split('.')[0]
+                txt_file=docx_txt.docx_txt_convert(file_name)
+                
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.txt', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ TXT
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(str(get_name_without_extension)+'.txt')
+            
     
-    ##################################### DOCUMENT DOCX TO PNG HANDLER ###########################################
+##################################### DOCUMENT DOCX TO PNG HANDLER ###########################################
 
 
-    elif call.data=="docx_png":
+        elif call.data=="docx_png":
+            
+            await call.message.reply(" available for conversion..")
+            
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"png conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                
+                bot.send_message(message1.chat.id, "File converting is started,please wait\n")
+                get_name_without_extension = file_name.split('.')[0]
+                
+                png_file=docx_png.docx_png_convert(file_name)
+                
+                for i in range(1,png_file+1):
+                    bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.png', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ PNG
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                for i in range(1,png_file+1):
+                    os.remove(get_name_without_extension+str(i)+'.png')
+            
         
-        await call.message.reply(" available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"png conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        bot.send_message(message1.chat.id, "File converting is started,please wait\n")
-        get_name_without_extension = file_name.split('.')[0]
-        
-        png_file=docx_png.docx_png_convert(file_name)
-        
-       
-        
-        for i in range(1,png_file+1):
-            bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.png', 'rb'))
+##################################### DOCUMENT DOCX TO JPG HANDLER ###########################################
+
     
-        os.remove(str(file_name))
+        elif call.data=="docx_jpg":
         
-        for i in range(1,png_file+1):
-            os.remove(get_name_without_extension+str(i)+'.png')
+            await call.message.reply(" available for conversion..")
             
-        
-    ##################################### DOCUMENT DOCX TO JPG HANDLER ###########################################
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
+            
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
+            
+            bot.reply_to(message1,"jpg conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                
+                docx_pdf.docx_pdf_convert(file_name)
+                
+                file_name = file_name.split('.')[0]
+                file_name=file_name +'.pdf'
+                
+                pdf_jpg.pdf_jpg_convert(file_name)
+                
+                
+                file = open(file_name, 'rb')
+                readpdf = PyPDF2.PdfFileReader(file)
+                totalpages = readpdf.numPages
+                
+                
+                get_name_without_extension= file_name.split('.')[0]
+                
+                
+                for i in range(totalpages):
+                    bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.jpg', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ JPG
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                
+                for i in range(totalpages):
+                    os.remove(get_name_without_extension+str(i)+'.jpg')
+                    
+            
+##################################### DOCUMENT DOCX TO RTF HANDLER ###########################################
 
-    
-    elif call.data=="docx_jpg":
-    
-        await call.message.reply(" available for conversion..")
         
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"jpg conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        docx_pdf.docx_pdf_convert(file_name)
-        
-        file_name = file_name.split('.')[0]
-        file_name=file_name +'.pdf'
-        
-        pdf_jpg.pdf_jpg_convert(file_name)
-        
-        
-        file = open(file_name, 'rb')
-        readpdf = PyPDF2.PdfFileReader(file)
-        totalpages = readpdf.numPages
-        
-        
-        get_name_without_extension= file_name.split('.')[0]
-        
-        
-        for i in range(totalpages):
-            bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.jpg', 'rb'))
-        
-        os.remove(str(file_name))
-        
-        for i in range(totalpages):
-            os.remove(get_name_without_extension+str(i)+'.jpg')
+        elif call.data=="docx_rtf":
+            await call.message.reply(" available for conversion..")
             
+            file_id = message1.document.file_id
+            file_name = message1.document.file_name
             
-    ##################################### DOCUMENT DOCX TO RTF HANDLER ###########################################
-
-        
-    elif call.data=="docx_rtf":
-        await call.message.reply(" available for conversion..")
-        
-        file_id = message1.document.file_id
-        file_name = message1.document.file_name
-        
-        pdf_document = bot.get_file(file_id)
-        downloaded_file = bot.download_file(pdf_document.file_path)
-        
-        bot.reply_to(message1,"rtf conversion in process...")
-        
-        with open(f'{file_name}', 'wb') as file:
-            file.write(downloaded_file)
-        
-        docx_rtf.docx_rtf_convert(file_name)
-        
-        get_name_without_extension= file_name.split('.')[0]
-        bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.rtf', 'rb'))
-        
-        os.remove(str(file_name))
-        os.remove(get_name_without_extension+'.rtf')
+            pdf_document = bot.get_file(file_id)
+            downloaded_file = bot.download_file(pdf_document.file_path)
             
-    await call.answer()
+            bot.reply_to(message1,"rtf conversion in process⌛...")
+            
+            try:
+                with open(f'{file_name}', 'wb') as file:
+                    file.write(downloaded_file)
+                
+                docx_rtf.docx_rtf_convert(file_name)
+                
+                get_name_without_extension= file_name.split('.')[0]
+                bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.rtf', 'rb'))
+            
+            except:
+                error_message = """ℹ️ Task Details
+        Conversion: DOCX ➡ RTF
+        Status: Failed
+        ❌ Conversion failed
+        Error: Converted file is empty"""
+                bot.reply_to(message1, error_message)
+            
+            finally:
+                os.remove(str(file_name))
+                os.remove(get_name_without_extension+'.rtf')
+                
+        await call.answer()
+        
+    except Exception as e:
+        error_message = "An error occurred: "
+        bot.reply_to(message1, error_message)
     
  
     

@@ -1,0 +1,22 @@
+{
+  "name": "format_converter_bot",
+  "version": "1.0.0",
+  "description": "hii",
+  "main": "main.py",
+  "scripts": {
+    "test": "python3 main.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhishek6973/Format_converter_bot.git"
+  },
+  "keywords": [
+    "hi"
+  ],
+  "author": "abhishek6973",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abhishek6973/Format_converter_bot/issues"
+  },
+  "homepage": "https://github.com/Abhishek6973/Format_converter_bot#readme"
+}
