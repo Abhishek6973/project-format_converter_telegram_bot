@@ -23,7 +23,7 @@ from conversion_png import png_jpg,png_gif,png_pdf
 
 import PyPDF2
 
-token = os.environ["BOT_TOKEN"]
+token = os.getenv("BOT_TOKEN")
 bot1 = Bot(token)
 Bot.set_current(bot1)
 
