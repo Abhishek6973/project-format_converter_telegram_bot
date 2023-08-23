@@ -34,7 +34,7 @@ app=web.Application()
 webhook_path = f'/{token}'
 
 async def set_webhook():
-    webhook_uri = f'https://format-converter-bot.onrender.com{webhook_path}'
+    webhook_uri = f'https://formatConverterBot-Multifunctional-tg-ak.onrender.com{webhook_path}'
     await bot1.set_webhook(
         webhook_uri
     )
