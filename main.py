@@ -1,6 +1,7 @@
 import csv
 from email import message
 from fileinput import filename
+from aiohttp import web 
 
 from aiogram import Bot,Dispatcher,executor,types
 from aiogram.types import InlineKeyboardMarkup,InlineKeyboardButton,ReplyKeyboardMarkup,ReplyKeyboardRemove,KeyboardButton
@@ -22,16 +23,29 @@ from conversion_png import png_jpg,png_gif,png_pdf
 
 import PyPDF2
 
-
-
-
-token = '5504002265:AAHRJ5aNWsmY-FInF6mBOcgouCu7_mrvPYk'
+token = os.environ["BOT_TOKEN"]
 bot1 = Bot(token)
+Bot.set_current(bot1)
 
 dp = Dispatcher(bot1)
-token="5504002265:AAHRJ5aNWsmY-FInF6mBOcgouCu7_mrvPYk"
 
+app=web.Application()
+
+webhook_path = f'/{token}'
+
+async def set_webhook():
+    webhook_uri = f'https://format-converter-bot.onrender.com{webhook_path}'
+    await bot1.set_webhook(
+        webhook_uri
+    )
+    
+async def on_startup(_):
+    await set_webhook()
+
+    
 bot = telebot.TeleBot(token)
+
+
 
 
 ##################################### PDF HANDLER ###########################################
@@ -114,6 +128,7 @@ async def amn(message):
 
 ##################################### About Message HANDLER ###########################################
 
+
 @dp.message_handler(commands=['about'])
 async def about_messages(message):
 
@@ -148,7 +163,6 @@ TXT, DOC, DOCX, PDF, CSV, RTF, DOC
 
 
 ##################################### Support Message HANDLER ###########################################
-
 
 
 @dp.message_handler(commands = ['support'])
@@ -560,6 +574,7 @@ Error: Converted file is empty"""
                 os.remove(str(file_name))
                 os.remove(str(get_name_without_extension)+'.csv')
 
+
 ##################################### DOCUMENT PDF TO TXT HANDLER ###########################################
 
 
@@ -621,8 +636,8 @@ Error: Converted file is empty"""
                 png_file=pdf_png.pdf_png_convert(file_name)
 
                 file = open(file_name, 'rb')
-                readpdf = PyPDF2.PdfFileReader(file)
-                totalpages = readpdf.numPages
+                readpdf = PyPDF2.PdfReader(file)
+                totalpages = len(readpdf.pages)
 
                 for i in range(totalpages):
                     bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.png', 'rb'))
@@ -667,8 +682,8 @@ Error: Converted file is empty"""
                 png_file=pdf_jpg.pdf_jpg_convert(file_name)
 
                 file = open(file_name, 'rb')
-                readpdf = PyPDF2.PdfFileReader(file)
-                totalpages = readpdf.numPages
+                readpdf = PyPDF2.PdfReader(file)
+                totalpages = len(readpdf.pages)
 
                 for i in range(totalpages):
                     bot.send_document(chat_id = message1.chat.id, document=open(get_name_without_extension+str(i)+'.jpg', 'rb'))
@@ -683,9 +698,8 @@ Error: Converted file is empty"""
 
             finally:
                 os.remove(str(file_name))
-
                 for i in range(totalpages):
-                    os.remove(str(get_name_without_extension)+str(i)+'.jpg')
+                    os.remove(file_name[0:len(file_name)-4]+str(i)+'.jpg')
 
 
 ##################################### DOCUMENT PDF TO RTF HANDLER ###########################################
@@ -696,7 +710,7 @@ Error: Converted file is empty"""
 
             file_id = message1.document.file_id
             file_name = message1.document.file_name
-
+            
             pdf_document = bot.get_file(file_id)
             downloaded_file = bot.download_file(pdf_document.file_path)
 
@@ -839,7 +853,6 @@ async def random_value(call:types.CallbackQuery):
                 get_name_without_extension = file_name.split('.')[0]
                 doc_file=docx_doc.docx_doc_convert(file_name)
 
-
                 bot.send_document(chat_id = message1.chat.id, document=open(f'{get_name_without_extension}.doc', 'rb'))
 
             except:
@@ -960,8 +973,8 @@ async def random_value(call:types.CallbackQuery):
 
 
                 file = open(file_name, 'rb')
-                readpdf = PyPDF2.PdfFileReader(file)
-                totalpages = readpdf.numPages
+                readpdf = PyPDF2.PdfReader(file)
+                totalpages = len(readpdf.pages)
 
 
                 get_name_without_extension= file_name.split('.')[0]
@@ -1026,12 +1039,27 @@ async def random_value(call:types.CallbackQuery):
         error_message = "An error occurred: "
         bot.reply_to(message1, error_message)
 
+async def handle_webhook(request):
+    url = str(request.url)
+    index = url.rfind('/')
+    token = url[index+1:]
+    
+    if token == token:
+        update = types.Update(**await request.json())
+        await dp.process_update(update)
+        
+        return web.Response()
+    else:
+        return web.Response(status=403)
 
 
+app.router.add_post(f'/{token}', handler=handle_webhook)
 
-def main():
-    executor.start_polling(dp)
-
-
-if __name__=='__main__':
-    main()
+if __name__ == "__main__":
+    app.on_startup.append(on_startup)
+    
+    web.run_app(
+        app,
+        host='0.0.0.0',
+        port='8080'
+    )
